@@ -1,0 +1,65 @@
+body {
+  margin: 0;
+  height: 100%;
+  //设置文本渲染方式 optimizeLegibility侧重渲染文本的可读性 geometricPrecision侧重渲染几何精度 optimizeSpeed侧重渲染速度
+  text-rendering: optimizeLegibility;
+  //字体抗锯齿渲染 https://developer.mozilla.org/en-US/docs/Web/CSS/font-smooth
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+  font-size: 12px;
+  overflow-x: hidden;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+.app-wrapper {
+  min-height:100vh;
+}
+
+.app-wrapper-sider {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  box-shadow: 2px 0 6px rgba(0,21,41,.35);
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
