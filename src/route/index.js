@@ -40,6 +40,22 @@ const routes = [
         component: () => import("@/views/commodity/list/index.vue")
       },
       {
+        path: "/type/add",
+        component: () => import("@/views/type/add/index.vue")
+      },
+      {
+        path: "/type/list",
+        component: () => import("@/views/type/list/index.vue")
+      },
+      {
+        path: "/brand/add",
+        component: () => import("@/views/brand/add/index.vue")
+      },
+      {
+        path: "/brand/list",
+        component: () => import("@/views/brand/list/index.vue")
+      },
+      {
         path: "/order",
         component: () => import("@/views/order/list/index.vue")
       }

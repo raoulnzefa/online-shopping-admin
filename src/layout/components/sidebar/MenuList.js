@@ -35,6 +35,36 @@ const menuData = [
     ]
   },
   {
+    path: "type",
+    title: "类型信息",
+    icon: "tag",
+    children: [
+      {
+        path: "add",
+        title: "添加类型"
+      },
+      {
+        path: "list",
+        title: "类型列表"
+      }
+    ]
+  },
+  {
+    path: "brand",
+    title: "品牌信息",
+    icon: "tag",
+    children: [
+      {
+        path: "add",
+        title: "添加品牌"
+      },
+      {
+        path: "list",
+        title: "品牌列表"
+      }
+    ]
+  },
+  {
     path: "order",
     title: "订单信息",
     icon: "ordered-list"

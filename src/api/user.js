@@ -17,3 +17,10 @@ export function getUserInfo(userId) {
     }
   });
 }
+
+export function getUserList() {
+  return request({
+    url: "/getUserList",
+    method: "get"
+  });
+}
