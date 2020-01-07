@@ -4,6 +4,7 @@
       <a-form-item label="所属分类" v-bind="formItemLayout">
         <a-cascader
           :options="options"
+          placeholder="请输入所属分类"
           v-decorator="[
             'type',
             {
@@ -32,7 +33,7 @@
           action="http://192.168.137.1:3000/uploadbrandLogo"
           listType="picture-card"
           :fileList="imageAddress"
-          :remove="remove"
+          :remove="removeImage"
           @preview="handlePreview"
           @change="handleChange"
           ,
@@ -136,10 +137,11 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
           addBrand(values)
             .then(() => {
               this.$message.success("添加成功");
+              this.validateStatus = "";
+              this.errorMessage = "";
             })
             .catch(err => {
               console.log(err);
@@ -154,7 +156,7 @@ export default {
     handleChange({ fileList }) {
       this.imageAddress = fileList;
     },
-    remove(file) {
+    removeImage(file) {
       console.log(file);
     }
   }

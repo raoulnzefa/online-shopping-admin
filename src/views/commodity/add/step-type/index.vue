@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="bordered">
     <a-form :form="form">
-      <a-cascader :options="options" placeholder="Please select" />
+      <a-cascader :options="options" placeholder="请输入所属分类" />
     </a-form>
   </a-card>
 </template>

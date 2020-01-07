@@ -40,6 +40,36 @@ const routes = [
         component: () => import("@/views/commodity/list/index.vue")
       },
       {
+        path: "/commodity/attribute/list",
+        component: () => import("@/views/commodity/attribute/list/index.vue")
+      },
+      {
+        path: "/commodity/attribute/add/:id",
+        name: "attributeadd",
+        component: () => import("@/views/commodity/attribute/add/index.vue")
+      },
+      {
+        path: "/commodity/attribute/children/:id",
+        name: "attributelist",
+        component: () =>
+          import("@/views/commodity/attribute/children/index.vue")
+      },
+      {
+        path: "/commodity/parameter/list",
+        component: () => import("@/views/commodity/parameter/list/index.vue")
+      },
+      {
+        path: "/commodity/parameter/add/:id",
+        name: "parameteradd",
+        component: () => import("@/views/commodity/parameter/add/index.vue")
+      },
+      {
+        path: "/commodity/parameter/children/:id",
+        name: "parameterlist",
+        component: () =>
+          import("@/views/commodity/parameter/children/index.vue")
+      },
+      {
         path: "/type/add",
         component: () => import("@/views/type/add/index.vue")
       },

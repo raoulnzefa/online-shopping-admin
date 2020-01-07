@@ -6,7 +6,7 @@ const menuData = [
   },
   {
     path: "user",
-    title: "用户信息",
+    title: "用户管理",
     icon: "user",
     children: [
       {
@@ -21,7 +21,7 @@ const menuData = [
   },
   {
     path: "commodity",
-    title: "商品信息",
+    title: "商品管理",
     icon: "shopping",
     children: [
       {
@@ -31,12 +31,20 @@ const menuData = [
       {
         path: "list",
         title: "商品列表"
+      },
+      {
+        path: "attribute/list",
+        title: "商品属性"
+      },
+      {
+        path: "parameter/list",
+        title: "商品参数"
       }
     ]
   },
   {
     path: "type",
-    title: "类型信息",
+    title: "类型管理",
     icon: "tag",
     children: [
       {
@@ -51,7 +59,7 @@ const menuData = [
   },
   {
     path: "brand",
-    title: "品牌信息",
+    title: "品牌管理",
     icon: "tag",
     children: [
       {
@@ -66,7 +74,7 @@ const menuData = [
   },
   {
     path: "order",
-    title: "订单信息",
+    title: "订单管理",
     icon: "ordered-list"
   }
 ];

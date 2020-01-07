@@ -65,13 +65,17 @@ export default {
     getAllShopTypeList() {
       getAllShopTypeList()
         .then(res => {
-          this.typeList = conversionData(res.data);
+          const typeList = conversionData(res.data);
+          typeList.forEach(index => {
+            if (index.lastName == "-1") {
+              this.typeList.push(index);
+            }
+          });
         })
         .catch(error => {
           console.log(error);
         });
     },
-
     updateShopTypeStatus(record, value) {
       var obj = {
         id: record._id,

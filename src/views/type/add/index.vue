@@ -91,7 +91,7 @@ export default {
       getAllShopTypeList()
         .then(res => {
           res.data.forEach(index => {
-            if (index.status === true && index.lastName === -1) {
+            if (index.status === true && index.lastName === "-1") {
               _this.typeList.push(index);
             }
           });

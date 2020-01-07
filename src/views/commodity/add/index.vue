@@ -16,6 +16,9 @@
       <a-button v-if="current === steps.length - 1" type="primary">
         完成
       </a-button>
+      <a-button v-if="current > 0" style="margin-left: 8px" @click="current--">
+        上一步
+      </a-button>
     </div>
   </a-card>
 </template>
@@ -35,11 +38,6 @@ export default {
     stepInfo,
     stepType
   },
-  methods: {
-    next() {},
-    prev() {
-      this.current--;
-    }
-  }
+  methods: {}
 };
 </script>

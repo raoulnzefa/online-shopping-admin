@@ -4,46 +4,39 @@
       <a-form-item label="商品名称" v-bind="formItemLayout">
         <a-input
           v-decorator="[
-            'commodityName',
+            'name',
             {
               rules: [{ required: true, message: '请输入商品名称' }]
             }
           ]"
         />
       </a-form-item>
-      <a-form-item label="商品数量" v-bind="formItemLayout">
-        <a-input-number :min="1" :max="9999" />
+      <a-form-item label="商品标语" v-bind="formItemLayout">
+        <a-input v-decorator="['title']" />
       </a-form-item>
-      <a-form-item label="商品介绍" v-bind="formItemLayout">
-        <a-textarea :rows="4" />
-      </a-form-item>
-      <a-form-item label="商品价格" v-bind="formItemLayout">
-        <a-input-number :min="0" />
-      </a-form-item>
-      <a-form-item label="商品图片" v-bind="formItemLayout">
-        <a-upload
-          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-          listType="picture-card"
-          :fileList="imgagefileList"
-          :remove="remove"
-          @preview="handlePreview"
-          @change="handleChange"
+      <a-form-item label="商品品牌" v-bind="formItemLayout">
+        <a-select
+          v-decorator="[
+            'brand',
+            {
+              rules: [{ required: true, message: '请输入商品品牌' }]
+            }
+          ]"
         >
-          <div v-if="imgagefileList.length < 10">
-            <a-icon type="plus" />
-            <div class="ant-upload-text">上传图片</div>
-          </div>
-        </a-upload>
-        <a-modal :visible="previewVisible" @cancel="previewVisible = false">
-          <img alt="example" style="width: 100%" :src="previewImage" />
-        </a-modal>
+          <a-select-option
+            v-for="item in brandList"
+            :value="item._vid"
+            :key="item._vid"
+            >{{ item.name }}</a-select-option
+          >
+        </a-select>
       </a-form-item>
-      <a-form-item label="商品视频" v-bind="formItemLayout"></a-form-item>
     </a-form>
   </a-card>
 </template>
 
 <script>
+import { getBrandList } from "@/api/brand";
 export default {
   data() {
     return {
@@ -60,21 +53,21 @@ export default {
           md: { span: 10 }
         }
       },
-      previewVisible: false,
-      previewImage: "",
-      imgagefileList: []
+      brandList: []
     };
   },
+  created() {
+    this.getBrandList();
+  },
   methods: {
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
-      this.previewVisible = true;
-    },
-    handleChange({ fileList }) {
-      this.imgagefileList = fileList;
-    },
-    remove(file) {
-      console.log(file);
+    getBrandList() {
+      getBrandList()
+        .then(res => {
+          this.brandList = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
