@@ -1,6 +1,6 @@
 <template>
   <a-card>
-    <a-table :dataSource="typeList" :columns="columns" bordered>
+    <a-table :dataSource="typeList" :columns="columns" rowKey="_id" bordered>
       <template slot="status" slot-scope="status">
         <a-tag v-if="status === true" color="green">正常</a-tag>
         <a-tag v-else color="red">冻结</a-tag>
@@ -29,7 +29,6 @@
 
 <script>
 import { getAllShopTypeList, updateShopTypeStatus } from "@/api/shop_type";
-import { conversionData } from "@/util/index";
 const columns = [
   {
     title: "类型名称",
@@ -65,7 +64,7 @@ export default {
     getAllShopTypeList() {
       getAllShopTypeList()
         .then(res => {
-          const typeList = conversionData(res.data);
+          const typeList = res.data;
           typeList.forEach(index => {
             if (index.lastName == "-1") {
               this.typeList.push(index);

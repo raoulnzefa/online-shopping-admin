@@ -1,12 +1,12 @@
 <template>
   <a-card>
-    <a-table :dataSource="userList" :columns="columns" bordered> </a-table>
+    <a-table :dataSource="userList" :columns="columns" rowKey="_id" bordered>
+    </a-table>
   </a-card>
 </template>
 
 <script>
 import { getUserList } from "@/api/user";
-import { conversionData } from "@/util/index";
 const columns = [
   {
     title: "用户名",
@@ -40,7 +40,7 @@ export default {
     getUserList() {
       getUserList()
         .then(res => {
-          this.userList = conversionData(res.data);
+          this.userList = res.data;
         })
         .catch(err => {
           console.log(err);

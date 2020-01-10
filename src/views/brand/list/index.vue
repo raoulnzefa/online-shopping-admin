@@ -1,6 +1,6 @@
 <template>
   <a-card>
-    <a-table :dataSource="brandList" :columns="columns" bordered>
+    <a-table :dataSource="brandList" :columns="columns" rowKey="_id" bordered>
       <template slot="imageAddress" slot-scope="text, record">
         <img :src="record.imageAddress" />
       </template>
@@ -25,7 +25,6 @@
 <script>
 import { getBrandList } from "@/api/brand";
 import { getAllShopTypeList } from "@/api/shop_type";
-import { conversionData } from "@/util/index";
 const columns = [
   {
     title: "品牌名称",
@@ -57,7 +56,7 @@ export default {
   methods: {
     getAllShopTypeList() {
       getAllShopTypeList().then(res => {
-        this.shopTypeList = conversionData(res.data);
+        this.shopTypeList = res.data;
       });
     },
     getBrandList() {

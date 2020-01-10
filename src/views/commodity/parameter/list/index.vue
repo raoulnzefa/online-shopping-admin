@@ -1,6 +1,6 @@
 <template>
   <a-card>
-    <a-table :dataSource="typeList" :columns="columns" bordered>
+    <a-table :dataSource="typeList" :columns="columns" rowKey="_id" bordered>
       <template slot="operation">
         <router-link :to="{ name: 'parameterlist', params: { id: '134' } }"
           ><a-button type="primary" style="margin-right:20px;"
@@ -19,7 +19,6 @@
 
 <script>
 import { getAllShopTypeList } from "@/api/shop_type";
-import { conversionData } from "@/util/index";
 const columns = [
   {
     title: "类型名称",
@@ -44,7 +43,7 @@ export default {
   methods: {
     getAllShopTypeList() {
       getAllShopTypeList().then(res => {
-        this.typeList = conversionData(res.data);
+        this.typeList = res.data;
       });
     }
   }
