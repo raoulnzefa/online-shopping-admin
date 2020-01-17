@@ -22,7 +22,8 @@
         <router-link
           :to="{ name: 'attributeupdate', params: { id: record._id } }"
         >
-          <a-button type="primary">修改</a-button>
+          <a-button type="primary" style="margin-right:20px;">修改</a-button>
+          <a-button type="primary">删除</a-button>
         </router-link>
       </template>
     </a-table>
@@ -36,13 +37,9 @@ const columns = [
     dataIndex: "name"
   },
   {
-    title: "所属分类",
-    dataIndex: "type",
-    scopedSlots: { customRender: "type" }
-  },
-  {
     title: "属性值列表",
-    dataIndex: "attribute"
+    dataIndex: "attribute",
+    scopedSlots: { customRender: "attribute" }
   },
   {
     title: "状态",
