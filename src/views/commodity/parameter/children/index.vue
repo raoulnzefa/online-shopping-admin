@@ -55,6 +55,7 @@ const columns = [
 export default {
   data() {
     return {
+      typeId: this.$route.params.id,
       parameterList: [],
       columns: columns
     };
@@ -64,7 +65,7 @@ export default {
   },
   methods: {
     getParameterList() {
-      getParameterList()
+      getParameterList(this.typeId)
         .then(res => {
           this.parameterList = res.data;
         })

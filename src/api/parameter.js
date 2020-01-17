@@ -9,10 +9,12 @@ export function addParameter(data) {
   });
 }
 
-export function getParameterList(data) {
+export function getParameterList(typeId) {
   return request({
     url: "/getParameterList",
     method: "get",
-    data
+    params: {
+      typeId
+    }
   });
 }

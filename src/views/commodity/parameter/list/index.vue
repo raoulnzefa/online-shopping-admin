@@ -36,6 +36,13 @@ export default {
     return {
       columns: columns
     };
+  },
+  methods: {
+    disposeData() {
+      this.typeList = this.typeList.filter(function(index) {
+        return index.lastName === "-1";
+      });
+    }
   }
 };
 </script>
