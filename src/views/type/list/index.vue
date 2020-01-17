@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { getAllShopTypeList, updateShopTypeStatus } from "@/api/shop_type";
+import { updateShopTypeStatus } from "@/api/shop_type";
+import Type from "@/components/mixin/Type";
 const columns = [
   {
     title: "类型名称",
@@ -51,29 +52,17 @@ const columns = [
   }
 ];
 export default {
+  mixins: [Type],
   data() {
     return {
-      typeList: [],
       columns: columns
     };
   },
-  created() {
-    this.getAllShopTypeList();
-  },
   methods: {
-    getAllShopTypeList() {
-      getAllShopTypeList()
-        .then(res => {
-          const typeList = res.data;
-          typeList.forEach(index => {
-            if (index.lastName == "-1") {
-              this.typeList.push(index);
-            }
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        });
+    disposeData() {
+      this.typeList = this.typeList.filter(function(index) {
+        return index.lastName === "-1";
+      });
     },
     updateShopTypeStatus(record, value) {
       var obj = {

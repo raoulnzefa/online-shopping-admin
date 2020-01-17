@@ -42,31 +42,19 @@
 </template>
 
 <script>
-import { addShopType, getAllShopTypeList } from "@/api/shop_type";
+import { addShopType } from "@/api/shop_type";
+import Type from "@/components/mixin/Type";
+import FormItemLayout from "@/components/mixin/FormItemLayout";
 export default {
+  mixins: [Type, FormItemLayout],
   data() {
     return {
       bordered: false,
       form: this.$form.createForm(this),
-      formItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 7 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 12 },
-          md: { span: 10 }
-        }
-      },
       errorMessage: "",
       validateStatus: "",
-      typeList: [],
       defaultType: { _id: "-1", name: "无上级分类" }
     };
-  },
-  created() {
-    this.getTypeList();
   },
   methods: {
     handleSubmit(e) {
@@ -86,20 +74,11 @@ export default {
         }
       });
     },
-    getTypeList() {
-      const _this = this;
-      getAllShopTypeList()
-        .then(res => {
-          res.data.forEach(index => {
-            if (index.status === true && index.lastName === "-1") {
-              _this.typeList.push(index);
-            }
-          });
-          _this.typeList.unshift(this.defaultType);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    disposeData() {
+      this.typeList = this.typeList.filter(function(index) {
+        return index.lastName === "-1";
+      });
+      this.typeList.unshift(this.defaultType);
     }
   }
 };

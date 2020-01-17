@@ -6,12 +6,12 @@
       </template>
       <template slot="type" slot-scope="text, record">
         <a-breadcrumb>
-          <a-breadcrumb-item v-for="item in shopTypeList" :key="item._id">
+          <a-breadcrumb-item v-for="item in typeList" :key="item._id">
             <span v-if="item._id === record.type[0]">
               {{ item.name }}
             </span>
           </a-breadcrumb-item>
-          <a-breadcrumb-item v-for="item in shopTypeList" :key="item._id">
+          <a-breadcrumb-item v-for="item in typeList" :key="item._id">
             <span v-if="item._id === record.type[1]">
               {{ item.name }}
             </span>
@@ -24,7 +24,7 @@
 
 <script>
 import { getBrandList } from "@/api/brand";
-import { getAllShopTypeList } from "@/api/shop_type";
+import Type from "@/components/mixin/Type";
 const columns = [
   {
     title: "品牌名称",
@@ -42,23 +42,17 @@ const columns = [
   }
 ];
 export default {
+  mixins: [Type],
   data() {
     return {
-      shopTypeList: [],
       brandList: [],
       columns: columns
     };
   },
   created() {
-    this.getAllShopTypeList();
     this.getBrandList();
   },
   methods: {
-    getAllShopTypeList() {
-      getAllShopTypeList().then(res => {
-        this.shopTypeList = res.data;
-      });
-    },
     getBrandList() {
       getBrandList()
         .then(res => {

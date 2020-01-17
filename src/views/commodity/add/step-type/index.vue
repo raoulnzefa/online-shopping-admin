@@ -7,42 +7,22 @@
 </template>
 
 <script>
-import { getAllShopTypeList } from "@/api/shop_type";
+import Type from "@/components/mixin/Type";
+import FormItemLayout from "@/components/mixin/FormItemLayout";
 export default {
+  mixins: [Type, FormItemLayout],
   data() {
     return {
       bordered: false,
       form: this.$form.createForm(this),
-      formItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 7 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 12 },
-          md: { span: 10 }
-        }
-      },
       options: []
     };
   },
-  created() {
-    this.getAllShopTypeList();
-  },
   methods: {
-    getAllShopTypeList() {
-      getAllShopTypeList()
-        .then(res => {
-          this.dataJoint(res.data);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
-    dataJoint(data) {
+    disposeData() {
       var arr = [];
-      data.forEach(index => {
+      const typeList = this.typeList;
+      typeList.forEach(index => {
         var obj = {
           label: index.name,
           value: index._id,
@@ -54,11 +34,10 @@ export default {
           arr.push(obj);
         }
       });
-      const _this = this;
-      arr.forEach(index => {
-        _this.options.forEach(obj => {
+      this.options.forEach(obj => {
+        obj.children = [];
+        arr.forEach(index => {
           if (obj.value == index.lastName) {
-            obj.children = [];
             obj.children.push(index);
           }
         });

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { getAllShopTypeList } from "@/api/shop_type";
+import Type from "@/components/mixin/Type";
 const columns = [
   {
     title: "类型名称",
@@ -31,21 +31,11 @@ const columns = [
   }
 ];
 export default {
+  mixins: [Type],
   data() {
     return {
-      typeList: [],
       columns: columns
     };
-  },
-  created() {
-    this.getAllShopTypeList();
-  },
-  methods: {
-    getAllShopTypeList() {
-      getAllShopTypeList().then(res => {
-        this.typeList = res.data;
-      });
-    }
   }
 };
 </script>

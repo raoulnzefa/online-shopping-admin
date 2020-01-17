@@ -77,31 +77,14 @@
 </template>
 <script>
 import { addAttribute } from "@/api/attribute";
+import FormItemLayout from "@/components/mixin/FormItemLayout";
 let id = 0;
 export default {
+  mixins: [FormItemLayout],
   data() {
     return {
       typeId: this.$route.params.id,
       bordered: false,
-      formItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 7 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 12 },
-          md: { span: 10 }
-        }
-      },
-      formItemLayoutWithOutLabel: {
-        labelCol: {
-          xs: { span: 24 }
-        },
-        wrapperCol: {
-          xs: { span: 10, offset: 7 }
-        }
-      },
       errorMessage: "",
       validateStatus: ""
     };
