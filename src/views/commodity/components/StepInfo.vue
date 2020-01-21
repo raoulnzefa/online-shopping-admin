@@ -25,8 +25,8 @@
         >
           <a-select-option
             v-for="item in brandList"
-            :value="item._vid"
-            :key="item._vid"
+            :value="item._id"
+            :key="item._id"
             >{{ item.name }}</a-select-option
           >
         </a-select>
