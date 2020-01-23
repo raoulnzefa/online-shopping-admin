@@ -9,12 +9,9 @@ export function addAttribute(data) {
   });
 }
 
-export function getAttributeList(typeId) {
+export function getAttributeList() {
   return request({
     url: "/getAttributeList",
-    method: "get",
-    params: {
-      typeId
-    }
+    method: "get"
   });
 }

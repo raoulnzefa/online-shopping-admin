@@ -3,8 +3,9 @@
     <a-steps :current="current" size="small">
       <a-step v-for="item in steps" :key="item" :title="item" />
     </a-steps>
-    <div class="steps-content" v-if="current === 0"><step-type /></div>
-    <div class="steps-content" v-if="current === 1"><step-info /></div>
+    <div class="steps-content" v-if="current === 0"><StepType /></div>
+    <div class="steps-content" v-if="current === 1"><StepInfo /></div>
+    <div class="steps-content" v-if="current === 2"><StepAttribute /></div>
     <div class="steps-action" style="text-align:center">
       <a-button
         v-if="current < steps.length - 1"
@@ -24,8 +25,9 @@
 </template>
 
 <script>
-import stepType from "./StepType";
-import stepInfo from "./StepInfo";
+import StepType from "./StepType";
+import StepInfo from "./StepInfo";
+import StepAttribute from "./StepAttribute";
 export default {
   data() {
     return {
@@ -35,8 +37,9 @@ export default {
     };
   },
   components: {
-    stepInfo,
-    stepType
+    StepInfo,
+    StepType,
+    StepAttribute
   },
   methods: {}
 };
