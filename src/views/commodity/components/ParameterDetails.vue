@@ -19,7 +19,7 @@
           ]"
         />
       </a-form-item>
-      <a-form-item label="属性值录入方式" v-bind="formItemLayout">
+      <a-form-item label="参数值录入方式" v-bind="formItemLayout">
         <a-radio-group
           v-decorator="['enter', { initialValue: parameterDefault }]"
         >

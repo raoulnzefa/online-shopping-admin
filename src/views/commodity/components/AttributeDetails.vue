@@ -19,6 +19,14 @@
           ]"
         />
       </a-form-item>
+      <a-form-item label="属性值录入方式" v-bind="formItemLayout">
+        <a-radio-group
+          v-decorator="['enter', { initialValue: attributeDefault }]"
+        >
+          <a-radio value="0">手工录入</a-radio>
+          <a-radio value="1">从下方添加后选择</a-radio>
+        </a-radio-group>
+      </a-form-item>
       <a-form-item
         v-for="(k, index) in form.getFieldValue('keys')"
         :key="k"
@@ -55,14 +63,14 @@
           <a-icon type="plus" />添加可选属性值
         </a-button>
       </a-form-item>
+      <a-form-item label="是否支持多选" v-bind="formItemLayout">
+        <a-switch v-decorator="['multiple', { initialValue: false }]" />
+      </a-form-item>
       <a-form-item label="是否开启属性" v-bind="formItemLayout">
         <a-switch
           defaultChecked
           v-decorator="['status', { initialValue: true }]"
         />
-      </a-form-item>
-      <a-form-item label="是否支持多选" v-bind="formItemLayout">
-        <a-switch v-decorator="['multiple', { initialValue: false }]" />
       </a-form-item>
       <a-form-item label="是否支持新增" v-bind="formItemLayout">
         <a-switch v-decorator="['news', { initialValue: false }]" />
@@ -85,6 +93,7 @@ export default {
     return {
       typeId: this.$route.params.id,
       bordered: false,
+      attributeDefault: "0",
       errorMessage: "",
       validateStatus: ""
     };
@@ -101,7 +110,6 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(this.typeId);
           values.typeId = this.typeId;
           addAttribute(values)
             .then(() => {
