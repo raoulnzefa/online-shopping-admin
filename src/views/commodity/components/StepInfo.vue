@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getBrandList } from "@/api/brand";
+import { getTypeBrandList } from "@/api/brand";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
 export default {
   mixins: [FormItemLayout],
@@ -49,11 +49,11 @@ export default {
     };
   },
   created() {
-    this.getBrandList();
+    this.getTypeBrandList(this.defaultCommodity.type);
   },
   methods: {
-    getBrandList() {
-      getBrandList()
+    getTypeBrandList(typeId) {
+      getTypeBrandList(typeId)
         .then(res => {
           this.brandList = res.data;
         })

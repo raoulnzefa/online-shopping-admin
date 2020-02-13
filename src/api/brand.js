@@ -16,3 +16,13 @@ export function getBrandList(data) {
     data
   });
 }
+
+export function getTypeBrandList(typeId) {
+  return request({
+    url: "/getTypeBrandList",
+    method: "get",
+    params: {
+      typeId
+    }
+  });
+}

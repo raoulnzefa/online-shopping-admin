@@ -30,7 +30,7 @@
   </a-card>
 </template>
 <script>
-import { getAttributeList } from "@/api/attribute";
+import { getTypeAttributeList } from "@/api/attribute";
 const columns = [
   {
     title: "属性名称",
@@ -71,11 +71,11 @@ export default {
     };
   },
   created() {
-    this.getAttributeList();
+    this.getTypeAttributeList();
   },
   methods: {
-    getAttributeList() {
-      getAttributeList(this.typeId)
+    getTypeAttributeList() {
+      getTypeAttributeList(this.typeId)
         .then(res => {
           this.attributeList = res.data;
         })

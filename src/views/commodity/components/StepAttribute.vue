@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getAttributeList } from "@/api/attribute";
+import { getTypeAttributeList } from "@/api/attribute";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
 const columns = [
   {
@@ -63,11 +63,11 @@ export default {
     };
   },
   created() {
-    this.getAttributeList();
+    this.getTypeAttributeList(this.defaultCommodity.type[0]);
   },
   methods: {
-    getAttributeList() {
-      getAttributeList().then(res => {
+    getTypeAttributeList(typeId) {
+      getTypeAttributeList(typeId).then(res => {
         this.attributeList = res.data;
       });
     },

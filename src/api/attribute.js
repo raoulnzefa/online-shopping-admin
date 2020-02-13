@@ -15,3 +15,13 @@ export function getAttributeList() {
     method: "get"
   });
 }
+
+export function getTypeAttributeList(typeId) {
+  return request({
+    url: "/getTypeAttributeList",
+    method: "get",
+    params: {
+      typeId
+    }
+  });
+}
