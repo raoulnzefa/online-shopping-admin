@@ -58,15 +58,20 @@
           @click="() => removeParameter(k)"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayoutWithOutLabel">
+      <a-form-item
+        v-bind="formItemLayoutWithOutLabel"
+        v-if="form.getFieldValue('enter') === '1'"
+      >
         <a-button type="dashed" style="width: 60%" @click="addParameter">
           <a-icon type="plus" />添加可选参数值
         </a-button>
       </a-form-item>
       <a-form-item label="是否开启参数" v-bind="formItemLayout">
         <a-switch
-          defaultChecked
-          v-decorator="['status', { initialValue: true }]"
+          v-decorator="[
+            'status',
+            { valuePropName: 'checked', initialValue: true }
+          ]"
         />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 7 }">
@@ -78,14 +83,18 @@
   </a-card>
 </template>
 <script>
-import { addParameter } from "@/api/parameter";
+import { addParameter, updateParameter, getParameter } from "@/api/parameter";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
 let id = 0;
 export default {
   mixins: [FormItemLayout],
+  props: {
+    isEdit: Boolean
+  },
   data() {
     return {
-      typeId: this.$route.params.id,
+      typeId: this.$route.params.typeId,
+      id: "",
       bordered: false,
       parameterDefault: "0",
       errorMessage: "",
@@ -98,26 +107,60 @@ export default {
       initialValue: [],
       preserve: true
     });
+    const typeId = this.typeId;
+    this.form.getFieldDecorator("typeId", {
+      initialValue: typeId,
+      preserve: true
+    });
+  },
+  created() {
+    if (this.isEdit) {
+      this.id = this.$route.params.id;
+      this.form.getFieldDecorator("id", {
+        initialValue: "",
+        preserve: true
+      });
+      this.getParameter();
+    }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log(this.typeId);
-          values.typeId = this.typeId;
-          addParameter(values)
-            .then(() => {
-              this.$message.success("添加成功");
-              this.validateStatus = "";
-              this.errorMessage = "";
-            })
-            .catch(error => {
-              this.validateStatus = "error";
-              this.errorMessage = error;
-            });
+          if (this.isEdit) {
+            this.updateParameter(values);
+          } else {
+            this.addParamecters(values);
+          }
         }
       });
+    },
+    addParamecters(values) {
+      values.typeId = this.typeId;
+      addParameter(values)
+        .then(() => {
+          this.$message.success("添加成功");
+          this.validateStatus = "";
+          this.errorMessage = "";
+        })
+        .catch(error => {
+          this.validateStatus = "error";
+          this.errorMessage = error;
+        });
+    },
+    updateParameter(values) {
+      values.id = this.id;
+      updateParameter(values)
+        .then(() => {
+          this.$message.success("修改成功");
+          this.validateStatus = "";
+          this.errorMessage = "";
+        })
+        .catch(error => {
+          this.validateStatus = "error";
+          this.errorMessage = error;
+        });
     },
     removeParameter(k) {
       const { form } = this;
@@ -137,6 +180,30 @@ export default {
       form.setFieldsValue({
         keys: nextKeys
       });
+    },
+    getParameter() {
+      getParameter(this.id)
+        .then(res => {
+          const data = res.data[0];
+          id = data.parameter.length;
+          let arr = [];
+          for (let i = 0; i < data.parameter.length; i++) {
+            arr.push(i);
+            this.form.getFieldValue(`parameter[${i}]`);
+          }
+          this.form.setFieldsValue({
+            typeId: data.typeId,
+            id: data._id,
+            name: data.name,
+            keys: arr,
+            parameter: data.parameter,
+            status: data.status,
+            enter: data.enter
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

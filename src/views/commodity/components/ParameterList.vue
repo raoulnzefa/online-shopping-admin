@@ -7,7 +7,8 @@
             >查看所有参数</a-button
           ></router-link
         >
-        <router-link :to="{ name: 'parameteradd', params: { id: record._id } }"
+        <router-link
+          :to="{ name: 'parameteradd', params: { typeId: record._id } }"
           ><a-button type="primary" style="margin-right:20px;"
             >添加新参数</a-button
           ></router-link

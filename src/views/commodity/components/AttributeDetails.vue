@@ -114,7 +114,7 @@ export default {
   data() {
     return {
       typeId: this.$route.params.typeId,
-      id: this.$route.params.id,
+      id: "",
       bordered: false,
       attributeDefault: "0",
       errorMessage: "",
@@ -135,6 +135,7 @@ export default {
   },
   created() {
     if (this.isEdit) {
+      this.id = this.$router.params.id;
       this.form.getFieldDecorator("id", {
         initialValue: "",
         preserve: true

@@ -1,5 +1,5 @@
 <template>
-  <ParameterDetails :isEdit="false"></ParameterDetails>
+  <ParameterDetails :isEdit="true"></ParameterDetails>
 </template>
 
 <script>

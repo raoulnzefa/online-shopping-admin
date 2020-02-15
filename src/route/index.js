@@ -64,9 +64,14 @@ const routes = [
         component: () => import("@/views/commodity/parameter/list/index.vue")
       },
       {
-        path: "/commodity/parameter/add/:id",
+        path: "/commodity/parameter/add/:typeId",
         name: "parameteradd",
         component: () => import("@/views/commodity/parameter/add/index.vue")
+      },
+      {
+        path: "/commodity/parameter/update/:id/:typeId",
+        name: "parameterupdate",
+        component: () => import("@/views/commodity/parameter/update/index.vue")
       },
       {
         path: "/commodity/parameter/children/:id",
