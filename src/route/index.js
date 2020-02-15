@@ -44,12 +44,12 @@ const routes = [
         component: () => import("@/views/commodity/attribute/list/index.vue")
       },
       {
-        path: "/commodity/attribute/add/:id",
+        path: "/commodity/attribute/add/:typeId",
         name: "attributeadd",
         component: () => import("@/views/commodity/attribute/add/index.vue")
       },
       {
-        path: "/commodity/attribute/update/:id",
+        path: "/commodity/attribute/update/:id/:typeId",
         name: "attributeupdate",
         component: () => import("@/views/commodity/attribute/update/index.vue")
       },

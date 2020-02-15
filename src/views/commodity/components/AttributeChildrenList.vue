@@ -20,17 +20,22 @@
       </template>
       <template slot="operation" slot-scope="text, record">
         <router-link
-          :to="{ name: 'attributeupdate', params: { id: record._id } }"
+          :to="{
+            name: 'attributeupdate',
+            params: { id: record._id, typeId: typeId }
+          }"
         >
           <a-button type="primary" style="margin-right:20px;">修改</a-button>
-          <a-button type="primary">删除</a-button>
         </router-link>
+        <a-button type="primary" @click="removeAttribute(record._id)"
+          >删除</a-button
+        >
       </template>
     </a-table>
   </a-card>
 </template>
 <script>
-import { getTypeAttributeList } from "@/api/attribute";
+import { getTypeAttributeList, removeAttribute } from "@/api/attribute";
 const columns = [
   {
     title: "属性名称",
@@ -78,6 +83,17 @@ export default {
       getTypeAttributeList(this.typeId)
         .then(res => {
           this.attributeList = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    removeAttribute(id) {
+      removeAttribute(id)
+        .then(() => {
+          const attributeList = [...this.attributeList];
+          this.attributeList = attributeList.filter(item => item._id !== id);
+          this.$message.success("删除成功");
         })
         .catch(err => {
           console.log(err);

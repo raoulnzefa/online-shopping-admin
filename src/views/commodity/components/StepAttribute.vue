@@ -10,18 +10,17 @@
         <a-radio-group
           v-model="defaultCommodity.attributeList[index].value"
           :options="item.attribute"
-          v-if="item.multiple === true"
+          v-if="item.multiple === false && item.enter === '1'"
         />
         <a-checkbox-group
           v-model="defaultCommodity.attributeList[index].value"
           :options="item.attribute"
-          v-else
+          v-if="item.multiple === true && item.enter === '1'"
         />
-        <!-- <a-input type="text" v-model="addContent" /><a-button
-            v-if="item.news === true"
-            @click="add(item.attribute)"
-            >新增</a-button
-          > -->
+        <a-input
+          v-model="defaultCommodity.attributeList[index].value"
+          v-if="item.enter === '0'"
+        />
       </a-form-item>
       <a-form-item v-bind="formItemLayoutWithOutLabel">
         <a-button type="primary" @click="prevStep">

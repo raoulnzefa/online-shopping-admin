@@ -7,7 +7,8 @@
             >查看所有属性</a-button
           ></router-link
         >
-        <router-link :to="{ name: 'attributeadd', params: { id: record._id } }"
+        <router-link
+          :to="{ name: 'attributeadd', params: { typeId: record._id } }"
           ><a-button type="primary" style="margin-right:20px;"
             >添加新属性</a-button
           ></router-link

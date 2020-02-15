@@ -13,7 +13,11 @@
             {
               validateTrigger: ['blur'],
               rules: [
-                { required: true, whitespace: true, message: '请输入属性名称' }
+                {
+                  required: true,
+                  whitespace: true,
+                  message: '请输入属性名称'
+                }
               ]
             }
           ]"
@@ -58,22 +62,37 @@
           @click="() => removeAttribute(k)"
         />
       </a-form-item>
-      <a-form-item v-bind="formItemLayoutWithOutLabel">
+      <a-form-item
+        v-bind="formItemLayoutWithOutLabel"
+        v-if="form.getFieldValue('enter') === '1'"
+      >
         <a-button type="dashed" style="width: 60%" @click="addAttribute">
           <a-icon type="plus" />添加可选属性值
         </a-button>
       </a-form-item>
       <a-form-item label="是否支持多选" v-bind="formItemLayout">
-        <a-switch v-decorator="['multiple', { initialValue: false }]" />
+        <a-switch
+          v-decorator="[
+            'multiple',
+            { valuePropName: 'checked', initialValue: false }
+          ]"
+        />
       </a-form-item>
       <a-form-item label="是否开启属性" v-bind="formItemLayout">
         <a-switch
-          defaultChecked
-          v-decorator="['status', { initialValue: true }]"
+          v-decorator="[
+            'status',
+            { valuePropName: 'checked', initialValue: true }
+          ]"
         />
       </a-form-item>
       <a-form-item label="是否支持新增" v-bind="formItemLayout">
-        <a-switch v-decorator="['news', { initialValue: false }]" />
+        <a-switch
+          v-decorator="[
+            'news',
+            { valuePropName: 'checked', initialValue: false }
+          ]"
+        />
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 7 }">
         <a-button type="primary" html-type="submit">
@@ -84,14 +103,18 @@
   </a-card>
 </template>
 <script>
-import { addAttribute } from "@/api/attribute";
+import { addAttribute, updateAttriubte, getAttribute } from "@/api/attribute";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
 let id = 0;
 export default {
   mixins: [FormItemLayout],
+  props: {
+    isEdit: Boolean
+  },
   data() {
     return {
-      typeId: this.$route.params.id,
+      typeId: this.$route.params.typeId,
+      id: this.$route.params.id,
       bordered: false,
       attributeDefault: "0",
       errorMessage: "",
@@ -104,23 +127,31 @@ export default {
       initialValue: [],
       preserve: true
     });
+    const typeId = this.typeId;
+    this.form.getFieldDecorator("typeId", {
+      initialValue: typeId,
+      preserve: true
+    });
+  },
+  created() {
+    if (this.isEdit) {
+      this.form.getFieldDecorator("id", {
+        initialValue: "",
+        preserve: true
+      });
+      this.getAttribute();
+    }
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          values.typeId = this.typeId;
-          addAttribute(values)
-            .then(() => {
-              this.$message.success("添加成功");
-              this.validateStatus = "";
-              this.errorMessage = "";
-            })
-            .catch(error => {
-              this.validateStatus = "error";
-              this.errorMessage = error;
-            });
+          if (this.isEdit) {
+            this.updateAttriubtes(values);
+          } else {
+            this.addAttributes(values);
+          }
         }
       });
     },
@@ -134,7 +165,6 @@ export default {
         keys: keys.filter(key => key !== k)
       });
     },
-
     addAttribute() {
       const { form } = this;
       const keys = form.getFieldValue("keys");
@@ -142,6 +172,57 @@ export default {
       form.setFieldsValue({
         keys: nextKeys
       });
+    },
+    addAttributes(values) {
+      addAttribute(values)
+        .then(() => {
+          this.$message.success("添加成功");
+          this.validateStatus = "";
+          this.errorMessage = "";
+        })
+        .catch(error => {
+          this.validateStatus = "error";
+          this.errorMessage = error;
+        });
+    },
+    updateAttriubtes(values) {
+      values.id = this.id;
+      updateAttriubte(values)
+        .then(() => {
+          this.$message.success("修改成功");
+          this.validateStatus = "";
+          this.errorMessage = "";
+        })
+        .catch(error => {
+          this.validateStatus = "error";
+          this.errorMessage = error;
+        });
+    },
+    getAttribute() {
+      getAttribute(this.id)
+        .then(res => {
+          const data = res.data[0];
+          id = data.attribute.length;
+          let arr = [];
+          for (let i = 0; i < data.attribute.length; i++) {
+            arr.push(i);
+            this.form.getFieldValue(`attribute[${i}]`);
+          }
+          this.form.setFieldsValue({
+            typeId: data.typeId,
+            id: data._id,
+            name: data.name,
+            keys: arr,
+            attribute: data.attribute,
+            status: data.status,
+            enter: data.enter,
+            multiple: data.multiple,
+            news: data.news
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

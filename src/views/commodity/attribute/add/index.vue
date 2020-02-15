@@ -1,5 +1,5 @@
 <template>
-  <AttributeDetails></AttributeDetails>
+  <AttributeDetails :isEdit="false"></AttributeDetails>
 </template>
 
 <script>

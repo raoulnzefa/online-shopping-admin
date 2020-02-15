@@ -34,10 +34,10 @@ const defaultCommodity = {
   brand: "",
   attributeList: [
     {
-      value: ["16GB"]
+      value: []
     },
     {
-      value: ["黑色"]
+      value: []
     }
   ]
 };
