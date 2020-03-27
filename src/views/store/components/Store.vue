@@ -13,45 +13,32 @@
           ]"
         />
       </a-form-item>
-      <a-form-item
-        label="品牌名称"
-        v-bind="formItemLayout"
-        :help="errorMessage"
-        :validate-status="validateStatus"
-      >
+      <a-form-item label="店铺名称" v-bind="formItemLayout">
         <a-input
           v-decorator="[
             'name',
             {
-              rules: [{ required: true, message: '请输入品牌名称' }]
+              rules: [{ required: true, message: '请输入店铺名称' }]
             }
           ]"
         />
       </a-form-item>
-      <a-form-item label="品牌图标" v-bind="formItemLayout">
-        <a-upload
-          action="http://192.168.50.167:3000/uploadbrandLogo"
-          listType="picture-card"
-          :fileList="imageAddress"
-          :remove="removeImage"
-          @preview="handlePreview"
-          @change="handleChange"
-          ,
+      <a-form-item label="店铺状态" v-bind="formItemLayout">
+        <a-select
           v-decorator="[
-            'imageAddress',
+            'status',
             {
-              rules: [{ required: true, message: '请上传品牌图标' }]
+              rules: [{ required: true, message: '请输入店铺状态' }]
             }
           ]"
         >
-          <div v-if="imageAddress.length < 2">
-            <a-icon type="plus" />
-            <div class="ant-upload-text">上传图片</div>
-          </div>
-        </a-upload>
-        <a-modal :visible="previewVisible" @cancel="previewVisible = false">
-          <img alt="example" style="width: 100%" :src="previewImage" />
-        </a-modal>
+          <a-select-option
+            v-for="item in statusList"
+            :value="item.value"
+            :key="item.value"
+            >{{ item.name }}</a-select-option
+          >
+        </a-select>
       </a-form-item>
       <a-form-item :wrapper-col="{ span: 12, offset: 7 }">
         <a-button type="primary" html-type="submit">
@@ -63,28 +50,24 @@
 </template>
 
 <script>
-import { addBrand } from "@/api/brand";
 import Type from "@/components/mixin/Type";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
+import { addStore } from "@/api/store";
+const statusList = [
+  { name: "正常", value: "0" },
+  { name: "关闭", value: "1" },
+  { name: "暂停营业", value: "2" }
+];
 export default {
   mixins: [Type, FormItemLayout],
   data() {
     return {
       bordered: false,
       form: this.$form.createForm(this),
-      validateStatus: "",
       errorMessage: "",
-      previewVisible: false,
-      previewImage: "",
-      imageAddress: [
-        // {
-        //   uid: "-1",
-        //   name: "ceshi",
-        //   path:
-        //     "http://192.168.10.63:3000/upload/images/1575970105025-574d36dbN262ef26d.jpg"
-        // }
-      ],
-      options: []
+      validateStatus: "",
+      options: [],
+      statusList: statusList
     };
   },
   methods: {
@@ -116,7 +99,7 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          addBrand(values)
+          addStore(values)
             .then(() => {
               this.$message.success("添加成功");
               this.validateStatus = "";
@@ -127,16 +110,6 @@ export default {
             });
         }
       });
-    },
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
-      this.previewVisible = true;
-    },
-    handleChange({ fileList }) {
-      this.imageAddress = fileList;
-    },
-    removeImage(file) {
-      console.log(file);
     }
   }
 };

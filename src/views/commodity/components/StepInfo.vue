@@ -1,14 +1,35 @@
 <template>
   <a-card :bordered="bordered">
-    <a-form>
+    <a-form :form="form">
       <a-form-item label="商品名称" v-bind="formItemLayout">
-        <a-input v-model="defaultCommodity.name" />
+        <a-input
+          v-decorator="[
+            'name',
+            {
+              rules: [{ required: true, message: '商品名称不能为空' }]
+            }
+          ]"
+        />
       </a-form-item>
       <a-form-item label="商品标语" v-bind="formItemLayout">
-        <a-input v-model="defaultCommodity.title" />
+        <a-input
+          v-decorator="[
+            'title',
+            {
+              rules: [{ required: true, message: '商品标语不能为空' }]
+            }
+          ]"
+        />
       </a-form-item>
       <a-form-item label="商品品牌" v-bind="formItemLayout">
-        <a-select v-model="defaultCommodity.brand">
+        <a-select
+          v-decorator="[
+            'brand',
+            {
+              rules: [{ required: true, message: '商品品牌不能为空' }]
+            }
+          ]"
+        >
           <a-select-option
             v-for="item in brandList"
             :value="item._id"
@@ -37,8 +58,9 @@
 <script>
 import { getTypeBrandList } from "@/api/brand";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
+import CommodityStep from "@/components/mixin/CommodityStep";
 export default {
-  mixins: [FormItemLayout],
+  mixins: [FormItemLayout, CommodityStep],
   props: {
     defaultCommodity: Object
   },
@@ -50,6 +72,21 @@ export default {
   },
   created() {
     this.getTypeBrandList(this.defaultCommodity.type);
+    this.form = this.$form.createForm(this, {
+      mapPropsToFields: () => {
+        return {
+          name: this.$form.createFormField({
+            value: this.defaultCommodity.name
+          }),
+          title: this.$form.createFormField({
+            value: this.defaultCommodity.title
+          }),
+          brand: this.$form.createFormField({
+            value: this.defaultCommodity.brand
+          })
+        };
+      }
+    });
   },
   methods: {
     getTypeBrandList(typeId) {
@@ -60,12 +97,6 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-    nextStep() {
-      this.$emit("nextStep");
-    },
-    prevStep() {
-      this.$emit("prevStep");
     }
   }
 };

@@ -27,7 +27,7 @@
         >
           <a-button type="primary" style="margin-right:20px;">修改</a-button>
         </router-link>
-        <a-button type="primary" @click="removeAttribute(record._id)"
+        <a-button type="primary" @click="removeAttribute(record)"
           >删除</a-button
         >
       </template>
@@ -88,11 +88,13 @@ export default {
           console.log(err);
         });
     },
-    removeAttribute(id) {
-      removeAttribute(id)
+    removeAttribute(data) {
+      removeAttribute(data)
         .then(() => {
           const attributeList = [...this.attributeList];
-          this.attributeList = attributeList.filter(item => item._id !== id);
+          this.attributeList = attributeList.filter(
+            item => item._id !== data._id
+          );
           this.$message.success("删除成功");
         })
         .catch(err => {

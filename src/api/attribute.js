@@ -18,14 +18,6 @@ export function updateAttriubte(data) {
   });
 }
 
-// 获取属性信息集合
-export function getAttributeList() {
-  return request({
-    url: "/getAttributeList",
-    method: "get"
-  });
-}
-
 // 根据id获取单个属性信息
 export function getAttribute(id, typeId) {
   return request({
@@ -49,12 +41,10 @@ export function getTypeAttributeList(typeId) {
   });
 }
 
-export function removeAttribute(id) {
+export function removeAttribute(data) {
   return request({
     url: "/removeAttribute",
     method: "post",
-    data: {
-      id
-    }
+    data
   });
 }

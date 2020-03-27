@@ -73,6 +73,21 @@ const menuData = [
     ]
   },
   {
+    path: "store",
+    title: "店铺管理",
+    icon: "tag",
+    children: [
+      {
+        path: "add",
+        title: "添加店铺"
+      },
+      {
+        path: "list",
+        title: "店铺列表"
+      }
+    ]
+  },
+  {
     path: "order",
     title: "订单管理",
     icon: "ordered-list"

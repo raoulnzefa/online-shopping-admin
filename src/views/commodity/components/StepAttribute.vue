@@ -1,26 +1,93 @@
 <template>
   <a-card :bordered="bordered">
-    <a-form>
+    <a-form :form="form">
       <a-form-item
-        v-for="(item, index) in attributeList"
+        v-for="(item, k) in attributeList"
         :key="item._id"
         :label="item.name"
         v-bind="formItemLayout"
       >
         <a-radio-group
-          v-model="defaultCommodity.attributeList[index].value"
           :options="item.attribute"
           v-if="item.multiple === false && item.enter === '1'"
+          v-decorator="[
+            `attributeList[${k}]`,
+            {
+              rules: [{ required: true, message: '商品属性不能为空' }]
+            }
+          ]"
         />
         <a-checkbox-group
-          v-model="defaultCommodity.attributeList[index].value"
           :options="item.attribute"
           v-if="item.multiple === true && item.enter === '1'"
+          v-decorator="[
+            `attributeList[${k}]`,
+            {
+              rules: [{ required: true, message: '商品属性不能为空' }]
+            }
+          ]"
         />
         <a-input
-          v-model="defaultCommodity.attributeList[index].value"
           v-if="item.enter === '0'"
+          v-decorator="[
+            `attributeList[${k}]`,
+            {
+              rules: [{ required: true, message: '商品属性不能为空' }]
+            }
+          ]"
         />
+        <a-input v-if="item.news === true" v-model="addContent[k]" />
+        <a-button v-if="item.news === true" @click="addAttribute(item, k)"
+          >新增</a-button
+        >
+      </a-form-item>
+      <a-form-item>
+        <a-table
+          :dataSource="defaultCommodity.attributeTableList"
+          :columns="columns"
+          bordered
+          rowKey="_id"
+        >
+          <!-- <template slot="picture" slot-scope="text">
+            <a-upload
+              name="avatar"
+              listType="picture-card"
+              class="avatar-uploader"
+              :showUploadList="false"
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              :beforeUpload="beforeUpload"
+              @change="handlePiChange"
+            >
+              <img v-if="text" :src="text" alt="avatar" />
+              <div v-else>
+                <a-icon :type="loading ? 'loading' : 'plus'" />
+                <div class="ant-upload-text">上传</div>
+              </div>
+            </a-upload>
+          </template> -->
+          <template
+            v-for="col in ['price', 'repertory', 'repertoryWarn', 'skuNo']"
+            :slot="col"
+            slot-scope="text, record"
+          >
+            <div :key="col">
+              <a-input
+                :value="text"
+                style="width:100px"
+                @change="e => handleChange(e.target.value, record._id, col)"
+              />
+            </div>
+          </template>
+          <template slot="operation" slot-scope="text, record">
+            <a-popconfirm
+              v-if="defaultCommodity.attributeTableList.length"
+              title="确认删除?"
+              @confirm="() => onDelete(record._id)"
+            >
+              <a href="javascript:;">删除</a>
+            </a-popconfirm>
+          </template>
+        </a-table>
       </a-form-item>
       <a-form-item v-bind="formItemLayoutWithOutLabel">
         <a-button type="primary" @click="prevStep">
@@ -29,12 +96,13 @@
         <a-button type="primary" @click="nextStep" style="margin-left:20px;">
           下一步
         </a-button>
+        <a-button
+          type="primary"
+          @click="createAttributeTab"
+          style="margin-left:20px;"
+          >同步</a-button
+        >
       </a-form-item>
-      <!-- <a-table
-        :dataSource="attributeList"
-        :columns="columns"
-        bordered
-      ></a-table> -->
     </a-form>
   </a-card>
 </template>
@@ -42,14 +110,48 @@
 <script>
 import { getTypeAttributeList } from "@/api/attribute";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
+import CommodityStep from "@/components/mixin/CommodityStep";
 const columns = [
+  // {
+  //   title: "图片",
+  //   dataIndex: "picture",
+  //   scopedSlots: { customRender: "picture" }
+  // },
   {
-    title: "参数名称",
-    dataIndex: "name"
+    title: "销售价格",
+    dataIndex: "price",
+    scopedSlots: { customRender: "price" }
+  },
+  {
+    title: "商品库存",
+    dataIndex: "repertory",
+    scopedSlots: { customRender: "repertory" }
+  },
+  {
+    title: "库存预警值",
+    dataIndex: "repertoryWarn",
+    scopedSlots: { customRender: "repertoryWarn" }
+  },
+  {
+    title: "SKU编号",
+    dataIndex: "skuNo",
+    scopedSlots: { customRender: "skuNo" }
+  },
+  {
+    title: "操作",
+    dataIndex: "operation",
+    scopedSlots: { customRender: "operation" }
   }
 ];
+const attributeField = {
+  // picture: "",
+  price: "",
+  repertory: "",
+  repertoryWarn: "",
+  skuNo: ""
+};
 export default {
-  mixins: [FormItemLayout],
+  mixins: [FormItemLayout, CommodityStep],
   props: {
     defaultCommodity: Object
   },
@@ -57,28 +159,110 @@ export default {
     return {
       bordered: false,
       attributeList: [],
-      columns: columns,
-      addContent: ""
+      columns: [],
+      defaultColumns: columns,
+      addContent: []
     };
   },
   created() {
+    const attributeList = {};
+    const data = this.defaultCommodity.attributeList;
     this.getTypeAttributeList(this.defaultCommodity.type[0]);
+    this.form = this.$form.createForm(this, {
+      mapPropsToFields: () => {
+        data.forEach((index, key) => {
+          attributeList[`attributeList[${key}]`] = this.$form.createFormField({
+            value: index
+          });
+        });
+        return attributeList;
+      }
+    });
   },
   methods: {
     getTypeAttributeList(typeId) {
       getTypeAttributeList(typeId).then(res => {
         this.attributeList = res.data;
+        this.column();
       });
     },
-    nextStep() {
-      this.$emit("nextStep");
+    column() {
+      this.columns = [...this.defaultColumns];
+      this.attributeList.forEach(index => {
+        var obj = {};
+        obj.title = index.name;
+        obj.dataIndex = index.key;
+        this.columns.unshift(obj);
+      });
     },
-    prevStep() {
-      this.$emit("prevStep");
+    onDelete(key) {
+      const dataSource = [...this.defaultCommodity.attributeTableList];
+      this.defaultCommodity.attributeTableList = dataSource.filter(
+        item => item._id !== key
+      );
     },
-    add(arr) {
-      arr.push(this.addContent);
+    addAttribute(item, k) {
+      const _this = this;
+      const repetition = item.attribute.filter(index => {
+        return index === _this.addContent[k];
+      });
+      if (repetition.length === 0 && this.addContent[k] !== undefined) {
+        item.attribute.push(this.addContent[k]);
+      }
+    },
+    // 笛卡尔积
+    // 目前最多支持4个
+    corssJoin(attributeList) {
+      return attributeList
+        .reduce((a, b) => {
+          let m = a.map(av => b.map(bv => [bv].concat(av)));
+          return m.reduce((c, d) => c.concat(d), []);
+        })
+        .map(v => v.reverse());
+    },
+    // 生成SKU表格
+    createAttributeTab() {
+      const attributeList = this.attributeList;
+      console.log(attributeList);
+      const attributeTabList = this.corssJoin(
+        this.form.getFieldValue("attributeList")
+      );
+      console.log(attributeTabList);
+      const attributeNewTabList = [];
+      let _id = 0;
+      attributeTabList.forEach(arr => {
+        const obj = {};
+        obj["_id"] = _id;
+        obj["attributeArr"] = arr;
+        arr.forEach((value, index) => {
+          obj[attributeList[index].key] = value;
+        });
+        _id++;
+        Object.assign(obj, attributeField);
+        attributeNewTabList.push(obj);
+      });
+      this.defaultCommodity.attributeTableList = attributeNewTabList;
+    },
+    handleChange(value, id, column) {
+      const newData = [...this.defaultCommodity.attributeTableList];
+      const target = newData.filter(item => id === item._id)[0];
+      if (target) {
+        target[column] = value;
+        this.defaultCommodity.attributeTableList = newData;
+      }
     }
+    // beforeUpload(file) {
+    //   const isJPG = file.type === "image/jpeg";
+    //   const isPNG = file.type === "image/png";
+    //   if (!isJPG || !isPNG) {
+    //     this.$message.error("图片文件格式有误");
+    //   }
+    //   const isLt2M = file.size / 1024 / 1024 < 2;
+    //   if (!isLt2M) {
+    //     this.$message.error("图片大小有误");
+    //   }
+    //   return isJPG && isLt2M;
+    // }
   }
 };
 </script>

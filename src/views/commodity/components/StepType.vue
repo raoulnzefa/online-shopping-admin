@@ -1,11 +1,16 @@
 <template>
   <a-card :bordered="bordered">
-    <a-form>
+    <a-form :form="form">
       <a-form-item label="商品所属类别" v-bind="formItemLayout">
         <a-cascader
           :options="options"
           placeholder="请输入所属分类"
-          v-model="defaultCommodity.type"
+          v-decorator="[
+            'type',
+            {
+              rules: [{ required: true, message: '所属分类不能为空' }]
+            }
+          ]"
         />
       </a-form-item>
       <a-form-item v-bind="formItemLayoutWithOutLabel">
@@ -20,8 +25,9 @@
 <script>
 import Type from "@/components/mixin/Type";
 import FormItemLayoutfrom from "@/components/mixin/FormItemLayout";
+import CommodityStep from "@/components/mixin/CommodityStep";
 export default {
-  mixins: [Type, FormItemLayoutfrom],
+  mixins: [Type, FormItemLayoutfrom, CommodityStep],
   props: {
     defaultCommodity: Object
   },
@@ -30,6 +36,17 @@ export default {
       bordered: false,
       options: []
     };
+  },
+  created() {
+    this.form = this.$form.createForm(this, {
+      mapPropsToFields: () => {
+        return {
+          type: this.$form.createFormField({
+            value: this.defaultCommodity.type
+          })
+        };
+      }
+    });
   },
   methods: {
     disposeData() {
@@ -55,9 +72,6 @@ export default {
           }
         });
       });
-    },
-    nextStep() {
-      this.$emit("nextStep");
     }
   }
 };

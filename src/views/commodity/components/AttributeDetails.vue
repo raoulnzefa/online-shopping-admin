@@ -23,6 +23,23 @@
           ]"
         />
       </a-form-item>
+      <a-form-item label="属性Key" v-bind="formItemLayout">
+        <a-input
+          v-decorator="[
+            'key',
+            {
+              validateTrigger: ['blur'],
+              rules: [
+                {
+                  required: true,
+                  whitespace: true,
+                  message: '请输入属性Key'
+                }
+              ]
+            }
+          ]"
+        />
+      </a-form-item>
       <a-form-item label="属性值录入方式" v-bind="formItemLayout">
         <a-radio-group
           v-decorator="['enter', { initialValue: attributeDefault }]"
@@ -118,7 +135,8 @@ export default {
       bordered: false,
       attributeDefault: "0",
       errorMessage: "",
-      validateStatus: ""
+      validateStatus: "",
+      attributeValueId: ""
     };
   },
   beforeCreate() {
@@ -127,15 +145,15 @@ export default {
       initialValue: [],
       preserve: true
     });
+  },
+  created() {
     const typeId = this.typeId;
     this.form.getFieldDecorator("typeId", {
       initialValue: typeId,
       preserve: true
     });
-  },
-  created() {
     if (this.isEdit) {
-      this.id = this.$router.params.id;
+      this.id = this.$route.params.id;
       this.form.getFieldDecorator("id", {
         initialValue: "",
         preserve: true
@@ -188,6 +206,7 @@ export default {
     },
     updateAttriubtes(values) {
       values.id = this.id;
+      values.attributeValueId = this.attributeValueId;
       updateAttriubte(values)
         .then(() => {
           this.$message.success("修改成功");
@@ -202,7 +221,8 @@ export default {
     getAttribute() {
       getAttribute(this.id)
         .then(res => {
-          const data = res.data[0];
+          const data = res.data;
+          this.attributeValueId = data.attributeValueId;
           id = data.attribute.length;
           let arr = [];
           for (let i = 0; i < data.attribute.length; i++) {
@@ -213,6 +233,7 @@ export default {
             typeId: data.typeId,
             id: data._id,
             name: data.name,
+            key: data.key,
             keys: arr,
             attribute: data.attribute,
             status: data.status,
