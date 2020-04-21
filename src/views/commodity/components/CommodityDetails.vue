@@ -66,9 +66,18 @@ const defaultCommodity = {
   type: ["5dfb4aa328479811c0100d5e", "5dfb4ab628479811c0100d5f"],
   name: "苹果",
   title: "苹果手机",
-  brand: "5dfb4ad228479811c0100d60",
+  brand: "5e9ecee91daacd4378c47599",
   content: "测试测",
   attributeList: [["16GB", "32GB"], ["红色", "黑色"]],
+  commidityImageList: [
+    {
+      uid: "-1",
+      name: "image.png",
+      status: "done",
+      path:
+        "http://192.168.199.147:3000/image/commidity/1587466056635-61ac36519d09e135.jpg"
+    }
+  ],
   attributeTableList: [
     {
       _id: 0,
@@ -132,7 +141,7 @@ export default {
         "商品物流"
       ],
       defaultCommodity: defaultCommodity,
-      current: 6
+      current: 1
     };
   },
   components: {

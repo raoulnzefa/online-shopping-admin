@@ -48,23 +48,6 @@
           bordered
           rowKey="_id"
         >
-          <!-- <template slot="picture" slot-scope="text">
-            <a-upload
-              name="avatar"
-              listType="picture-card"
-              class="avatar-uploader"
-              :showUploadList="false"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              :beforeUpload="beforeUpload"
-              @change="handlePiChange"
-            >
-              <img v-if="text" :src="text" alt="avatar" />
-              <div v-else>
-                <a-icon :type="loading ? 'loading' : 'plus'" />
-                <div class="ant-upload-text">上传</div>
-              </div>
-            </a-upload>
-          </template> -->
           <template
             v-for="col in ['price', 'repertory', 'repertoryWarn', 'skuNo']"
             :slot="col"
@@ -112,11 +95,6 @@ import { getTypeAttributeList } from "@/api/attribute";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
 import CommodityStep from "@/components/mixin/CommodityStep";
 const columns = [
-  // {
-  //   title: "图片",
-  //   dataIndex: "picture",
-  //   scopedSlots: { customRender: "picture" }
-  // },
   {
     title: "销售价格",
     dataIndex: "price",
@@ -144,7 +122,6 @@ const columns = [
   }
 ];
 const attributeField = {
-  // picture: "",
   price: "",
   repertory: "",
   repertoryWarn: "",
@@ -251,18 +228,6 @@ export default {
         this.defaultCommodity.attributeTableList = newData;
       }
     }
-    // beforeUpload(file) {
-    //   const isJPG = file.type === "image/jpeg";
-    //   const isPNG = file.type === "image/png";
-    //   if (!isJPG || !isPNG) {
-    //     this.$message.error("图片文件格式有误");
-    //   }
-    //   const isLt2M = file.size / 1024 / 1024 < 2;
-    //   if (!isLt2M) {
-    //     this.$message.error("图片大小有误");
-    //   }
-    //   return isJPG && isLt2M;
-    // }
   }
 };
 </script>

@@ -30,7 +30,7 @@
       </a-form-item>
       <a-form-item label="品牌图标" v-bind="formItemLayout">
         <a-upload
-          action="http://192.168.50.167:3000/uploadbrandLogo"
+          :action="baseURL"
           listType="picture-card"
           :fileList="imageAddress"
           :remove="removeImage"
@@ -64,14 +64,24 @@
 
 <script>
 import { addBrand } from "@/api/brand";
+import { baseURL } from "@/util/index";
 import Type from "@/components/mixin/Type";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
+function getBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
 export default {
   mixins: [Type, FormItemLayout],
   data() {
     return {
       bordered: false,
       form: this.$form.createForm(this),
+      baseURL: baseURL + "/uploadbrandLogo",
       validateStatus: "",
       errorMessage: "",
       previewVisible: false,
@@ -128,8 +138,11 @@ export default {
         }
       });
     },
-    handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl;
+    async handlePreview(file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj);
+      }
+      this.previewImage = file.url || file.preview;
       this.previewVisible = true;
     },
     handleChange({ fileList }) {
