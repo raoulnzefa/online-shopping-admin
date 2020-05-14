@@ -52,7 +52,7 @@
 <script>
 import Type from "@/components/mixin/Type";
 import FormItemLayout from "@/components/mixin/FormItemLayout";
-import { addStore } from "@/api/store";
+import { addStore, getStore, updateStore } from "@/api/store";
 const statusList = [
   { name: "正常", value: "0" },
   { name: "关闭", value: "1" },
@@ -60,8 +60,12 @@ const statusList = [
 ];
 export default {
   mixins: [Type, FormItemLayout],
+  props: {
+    isEdit: Boolean
+  },
   data() {
     return {
+      id: "",
       bordered: false,
       form: this.$form.createForm(this),
       errorMessage: "",
@@ -69,6 +73,12 @@ export default {
       options: [],
       statusList: statusList
     };
+  },
+  created() {
+    if (this.isEdit) {
+      this.id = this.$route.params.id;
+      this.getStore();
+    }
   },
   methods: {
     disposeData() {
@@ -95,21 +105,50 @@ export default {
         });
       });
     },
+    getStore() {
+      getStore(this.id).then(res => {
+        const data = res.data;
+        this.form.setFieldsValue({
+          type: data.type,
+          name: data.name,
+          status: data.status
+        });
+      });
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          addStore(values)
-            .then(() => {
-              this.$message.success("添加成功");
-              this.validateStatus = "";
-              this.errorMessage = "";
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          if (this.isEdit) {
+            values.id = this.id;
+            this.updateStore(values);
+          } else {
+            this.addStore(values);
+          }
         }
       });
+    },
+    addStore(data) {
+      addStore(data)
+        .then(() => {
+          this.$message.success("添加成功");
+          this.validateStatus = "";
+          this.errorMessage = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    updateStore(data) {
+      updateStore(data)
+        .then(() => {
+          this.$message.success("修改成功");
+          this.validateStatus = "";
+          this.errorMessage = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };

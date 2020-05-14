@@ -17,3 +17,35 @@ export function getStoreList(data) {
     data
   });
 }
+
+// 根据id获取商铺
+export function getStore(id) {
+  return request({
+    url: "/getStore",
+    method: "get",
+    params: {
+      id
+    }
+  });
+}
+
+// 修改店铺信息
+export function updateStore(data) {
+  return request({
+    url: "/updateStore",
+    method: "post",
+    data
+  });
+}
+
+// 修改店铺状态
+export function updateStoreStatus(id, status) {
+  return request({
+    url: "/updateStore",
+    method: "post",
+    params: {
+      id,
+      status
+    }
+  });
+}

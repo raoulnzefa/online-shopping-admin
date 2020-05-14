@@ -100,6 +100,11 @@ const routes = [
         component: () => import("@/views/store/add/index.vue")
       },
       {
+        path: "/store/update/:id",
+        name: "storeupdate",
+        component: () => import("@/views/store/update/index.vue")
+      },
+      {
         path: "/store/list",
         component: () => import("@/views/store/list/index.vue")
       },

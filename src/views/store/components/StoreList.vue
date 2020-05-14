@@ -20,8 +20,10 @@
         <a-tag v-if="text === '1'" color="red">关闭</a-tag>
         <a-tag v-if="text === '2'" color="orange">暂停营业</a-tag>
       </template>
-      <template slot="operation">
-        <a-button type="primary">修改</a-button>
+      <template slot="operation" slot-scope="text, record">
+        <router-link :to="{ name: 'storeupdate', params: { id: record._id } }"
+          ><a-button type="primary">修改</a-button></router-link
+        >
         <a-button type="primary" style="margin-left:20px;">暂停营业</a-button>
         <a-button type="danger" style="margin-left:20px;">冻结</a-button>
       </template>
@@ -30,7 +32,7 @@
 </template>
 
 <script>
-import { getStoreList } from "@/api/store";
+import { getStoreList, updateStoreStatus } from "@/api/store";
 import Type from "@/components/mixin/Type";
 const columns = [
   {
@@ -77,6 +79,11 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    updateStatus(status) {
+      updateStoreStatus(status).then(() => {
+        this.$messae.success("修改成功");
+      });
     }
   }
 };
