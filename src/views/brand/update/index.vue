@@ -1,5 +1,5 @@
 <template>
-  <Brand :isEdit="false"></Brand>
+  <Brand :isEdit="true"></Brand>
 </template>
 
 <script>

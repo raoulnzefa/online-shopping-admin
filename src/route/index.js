@@ -92,6 +92,11 @@ const routes = [
         component: () => import("@/views/brand/add/index.vue")
       },
       {
+        path: "/brand/update/:id",
+        name: "brandupdate",
+        component: () => import("@/views/brand/update/index.vue")
+      },
+      {
         path: "/brand/list",
         component: () => import("@/views/brand/list/index.vue")
       },
